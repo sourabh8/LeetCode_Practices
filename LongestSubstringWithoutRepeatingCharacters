@@ -1,0 +1,38 @@
+import java.util.HashMap;
+
+public class LongestSubstringWithoutRepeatingChar {
+    //input = "aabacbddaa"
+    //output should be acbd as it is the longest substring without repeating characters
+    //We will be using sliding window pattern with two pointers with variable sliding window size
+    public static void main(String[] args) {
+        System.out.println(getLength("aabacbddaa"));
+    }
+    public static int getLength(String sample){
+        int max_length=0;
+        int i=0;
+        int j=0;
+        HashMap<Character,Integer> map = new HashMap<Character,Integer>();
+        //Loop will run till j reaches end point of the string
+        while(j<sample.length()){
+            map.put(sample.charAt(j),map.getOrDefault(sample.charAt(j),0)+1);
+            //If map size is equal to window size then it can be one of the solution
+            if(map.size()==j-i+1){
+                max_length = Math.max(map.size(),max_length);
+            }
+            //If map size is smaller than window size it means there is some character with more than one occurances
+            else if (map.size()<j-i+1) {
+                while(map.size()<j-i+1) {
+                    map.put(sample.charAt(i), map.get(sample.charAt(i)) - 1);
+                    if(map.get(sample.charAt(i))==0){
+                        //remove entry of char At i from map
+                        map.remove(sample.charAt(i));
+                    }
+                    i++;
+                }
+            }
+            j++;
+
+        }
+        return max_length;
+    }
+}
